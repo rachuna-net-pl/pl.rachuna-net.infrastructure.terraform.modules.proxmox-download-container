@@ -1,41 +1,42 @@
-Ten moduł umożliwia pobranie pliku szablonu kontenera LXC (vztmpl) z podanego adresu URL i zapisanie go na wybranym węźle Proxmox VE w określonym datastore. Moduł obsługuje weryfikację sumy kontrolnej pliku, nadpisywanie istniejących plików oraz opcję wyłączenia weryfikacji certyfikatów SSL/TLS.
+## Requirements
 
----
-## Zmienne wejściowe
+| Name | Version |
+|------|---------|
+| <a name="requirement_proxmox"></a> [proxmox](#requirement\_proxmox) | ~> 0.76.1 |
 
-| Nazwa                | Typ     | Opis                                                                                   | Wartość domyślna |
-|----------------------|---------|----------------------------------------------------------------------------------------|------------------|
-| `datastore_id`       | string  | ID datastore, do którego zostanie pobrany plik                                         | -                |
-| `file_name`          | string  | Nazwa pliku do pobrania                                                                | -                |
-| `node_name`          | string  | Nazwa węzła Proxmox, na którym plik zostanie zapisany                                  | -                |
-| `url`                | string  | URL pliku do pobrania (musi zaczynać się od http:// lub https://)                      | -                |
-| `checksum`           | string  | Suma kontrolna pliku do weryfikacji (opcjonalne)                                       | ""               |
-| `checksum_algorithm` | string  | Algorytm sumy kontrolnej (md5, sha1, sha224, sha256, sha384, sha512) (opcjonalne)      | ""               |
-| `overwrite`          | bool    | Nadpisz plik, jeśli już istnieje                                                       | false            |
-| `overwrite_unmanaged`| bool    | Nadpisz plik, jeśli istnieje i nie jest zarządzany przez Terraform                     | false            |
-| `insecure`           | bool    | Wyłącz weryfikację certyfikatów SSL/TLS (ustaw na true, aby wyłączyć weryfikację)      | false            |
+## Providers
 
----
-## Zmienne wyjściowe
+| Name | Version |
+|------|---------|
+| <a name="provider_proxmox"></a> [proxmox](#provider\_proxmox) | ~> 0.76.1 |
 
-| Nazwa      | Opis                      |
-|------------|---------------------------|
-| `file_name`| Nazwa pobranego pliku     |
-| `id`       | ID zasobu pobranego pliku |
+## Modules
 
----
-## Przykład użycia
+No modules.
 
-```hcl
-module "ubuntu24-10" {
-  source = "git@gitlab.com:pl.rachuna-net/infrastructure/terraform/modules/proxmox-download-container.git?ref=v1.0.0"
+## Resources
 
-  datastore_id       = local.storage_name
-  node_name          = local.default_node
-  file_name          = "ubuntu-24.10.tar.zst"
-  url                = "http://download.proxmox.com/images/system/ubuntu-24.10-standard_24.10-1_amd64.tar.zst"
-  checksum           = "ac4cb1924de8091eb91226a80453186c"
-  checksum_algorithm = "md5"
-}
+| Name | Type |
+|------|------|
+| [proxmox_virtual_environment_download_file.template](https://registry.terraform.io/providers/bpg/proxmox/latest/docs/resources/virtual_environment_download_file) | resource |
 
-```
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_checksum"></a> [checksum](#input\_checksum) | The algorithm used to calculate the checksum | `string` | `""` | no |
+| <a name="input_checksum_algorithm"></a> [checksum\_algorithm](#input\_checksum\_algorithm) | The checksum of the file | `string` | `""` | no |
+| <a name="input_datastore_id"></a> [datastore\_id](#input\_datastore\_id) | The ID of the datastore to download the file to | `string` | n/a | yes |
+| <a name="input_file_name"></a> [file\_name](#input\_file\_name) | The name of the file to download | `string` | n/a | yes |
+| <a name="input_insecure"></a> [insecure](#input\_insecure) | SSL/TLS certificates will be verified | `bool` | `false` | no |
+| <a name="input_node_name"></a> [node\_name](#input\_node\_name) | The name of the node to download the file to | `string` | n/a | yes |
+| <a name="input_overwrite"></a> [overwrite](#input\_overwrite) | overwrite the file if it already exists | `bool` | `false` | no |
+| <a name="input_overwrite_unmanaged"></a> [overwrite\_unmanaged](#input\_overwrite\_unmanaged) | overwrite the file if it already exists and is not managed by Terraform | `bool` | `false` | no |
+| <a name="input_url"></a> [url](#input\_url) | URL pliku do pobrania (musi zaczynać się od http:// lub https://) | `string` | n/a | yes |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_file_name"></a> [file\_name](#output\_file\_name) | name of download file |
+| <a name="output_id"></a> [id](#output\_id) | id of download file |
